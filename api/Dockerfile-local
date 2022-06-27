@@ -1,0 +1,33 @@
+FROM php:7.3-fpm-alpine
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+RUN apk add --no-cache \
+    $PHPIZE_DEPS \
+    freetype-dev \
+    libzip-dev \
+    openssl-dev \
+    postgresql-dev
+
+RUN pecl install \
+    redis
+
+RUN docker-php-ext-configure zip \
+    --with-libzip=/usr/include
+
+RUN docker-php-ext-install \
+    gd \
+    pdo \
+    zip \
+    pcntl \
+    bcmath \
+    pdo_pgsql
+
+RUN docker-php-ext-enable \
+    redis
+
+RUN apk add --no-cache fcgi
+RUN apk add --no-cache bash
+RUN apk add --no-cache curl
+
+WORKDIR /var/www

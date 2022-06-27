@@ -1,0 +1,10 @@
+// Extends root scss of bootstrap
+:root {
+  --oe-color-shadow-ambient: #{$color-shadow-ambient};
+  --oe-color-shadow-key: #{$color-shadow-key};
+
+  --oe-shadow-small: 0 2px 5px 0 var(--oe-color-shadow-ambient),0 1px 1px 0 var(--oe-color-shadow-key);
+  --oe-shadow-medium: 0 7px 14px 0 var(--oe-color-shadow-ambient),0 3px 6px 0 var(--oe-color-shadow-key);
+  --oe-shadow-large: 0 15px 35px 0 var(--oe-color-shadow-ambient),0 5px 15px 0 var(--oe-color-shadow-key);
+  --oe-shadow-extraLarge: 0 50px 100px 0 var(--oe-color-shadow-ambient),0 15px 35px 0 var(--oe-color-shadow-ambient),0 5px 15px 0 var(--oe-color-shadow-key);
+}

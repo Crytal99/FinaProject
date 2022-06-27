@@ -1,0 +1,79 @@
+{
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The Laravel Framework.",
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
+    "license": "MIT",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/ownego/laravel-shopify.git"
+        }
+    ],
+    "require": {
+        "php": "^7.2.5|^8.0",
+        "encore/laravel-admin": "^1.8",
+        "fideloper/proxy": "^4.4",
+        "fruitcake/laravel-cors": "^2.2",
+        "laravel/framework": "^6.20.26",
+        "laravel/horizon": "^3.0",
+        "laravel/tinker": "^2.5",
+        "osiset/laravel-shopify": "dev-laravel6",
+        "predis/predis": "^1.1",
+        "symfony/sendinblue-mailer": "^5.4",
+        "tymon/jwt-auth": "^1.0"
+    },
+    "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.5",
+        "facade/ignition": "^1.16.15",
+        "fakerphp/faker": "^1.9.1",
+        "laravel/telescope": "^3.0",
+        "mockery/mockery": "^1.0",
+        "nunomaduro/collision": "^3.0",
+        "phpunit/phpunit": "^8.5.8|^9.3.3"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "classmap": [
+            "database/seeds",
+            "database/factories"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ]
+    },
+    "stability-flags": {
+        "osiset/laravel-shopify": 20
+    }
+}
