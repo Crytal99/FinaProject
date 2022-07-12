@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+
 
 class SearchController extends Controller
 {
     public function create(){
-        return auth()->user();
+        $search = DB::table('search_setting')->get();
+        return $search;
     }
 }
