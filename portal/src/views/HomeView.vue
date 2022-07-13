@@ -1,5 +1,3 @@
-
-
 <script setup >
 function say(message) {
     alert(message)

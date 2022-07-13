@@ -17,6 +17,7 @@ Route::namespace('API')->name('api.')->group(function () {
     Route::middleware('auth:api')->group(function () {
         Route::get('user', 'UserController@show')->name('user.show');
         Route::get('search', 'SearchController@create')->name('search.create');
+        Route::post('update', 'SearchController@update')->name('search.update');
     });
     
 });
