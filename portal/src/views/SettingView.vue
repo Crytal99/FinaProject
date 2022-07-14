@@ -14,7 +14,7 @@ p search_enabled:
 <div class="form-group"></div>
 <p>search_config: </p>
 <p>link logo: </p>
-<input v-model="logo" placeholder= 'logo'/>
+<input type="file" @change="handleImageSelected"/>
 <p>placholder: </p>
 <input v-model="placholder" placeholder= 'placholder'/>
 p popular_search_enabled: 
@@ -32,7 +32,7 @@ p popular_search_enabled:
 <script  lang="ts">
 import { ref, inject } from 'vue';
 import axios from '@/bootstrap/api-interceptor';
-
+import { useImageUpload } from "@/useImageUpload.js";
 // const user = ref(null);
 // const message = ref('');
 
