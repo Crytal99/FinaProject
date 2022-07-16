@@ -1,19 +1,18 @@
 import { defineStore } from 'pinia';
-import type {
-  IUser,
-  ILoginOAuthData,
-} from '@/models/Auth';
+import type { ILoginOAuthData, IUser } from '@/models/Auth';
 import axios from '@/bootstrap/api-interceptor';
 import AuthConfig from '@/configs/auth';
+import { GET_USER, REFRESH_TOKEN } from '@/configs/api';
 
 export interface IAuthState {
   token: null | string;
-  expiredAt: null | number; // eslint-disable-line camelcase
+  expiredAt: null | number;
   user: null | IUser;
 }
 
 const storageValue = localStorage.getItem(AuthConfig.TOKEN) || '{}';
 const payloadToken = JSON.parse(storageValue);
+const getExpiredAt = (expiresIn) => Date.now() + expiresIn * 1000;
 
 const defaultState: IAuthState = {
   token: payloadToken.token,
@@ -32,7 +31,7 @@ export const useAuthStore = defineStore({
       if (!state.expiredAt) {
         return 0;
       }
-      return Math.round((state.expiredAt - Date.now()) / 1000);
+      return state.expiredAt - Date.now() - 60 * 1000; // 60s before JWT TTL
     },
     isReady: (state) => (route: any) => {
       const isUserRoute = route.matched
@@ -54,12 +53,16 @@ export const useAuthStore = defineStore({
         throw new Error('Payload is not valid');
       }
 
-      localStorage.setItem(AuthConfig.TOKEN, JSON.stringify(payload));
+      const { token, expiresIn } = payload;
 
-      const { token, expiredAt } = payload;
-      // TODO verify token
       this.token = token;
-      this.expiredAt = expiredAt;
+      this.expiredAt = getExpiredAt(expiresIn);
+
+      const storageToken = {
+        token: this.token,
+        expiredAt: this.expiredAt,
+      };
+      localStorage.setItem(AuthConfig.TOKEN, JSON.stringify(storageToken));
 
       this.registerAuthorizonzationHeader(token);
     },
@@ -68,15 +71,20 @@ export const useAuthStore = defineStore({
       axios.defaults.headers.common.Authorization = `Bearer ${token}`;
     },
     async refresh() {
-      if (this.expiredAt && this.expiredAt > Date.now()) {
-        this.registerAuthorizonzationHeader(this.token);
-      } else {
-        await axios
-          .post('token/refresh', { token: this.token })
-          .then(({ data }) => {
-            this.login(data);
-          });
-      }
+      return axios
+        .post(REFRESH_TOKEN, {}, {
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+        })
+        .then((data) => {
+          const { token, expires_in: expiresIn } = data;
+          const payload: ILoginOAuthData = {
+            token,
+            expiresIn,
+          };
+          return this.login(payload);
+        });
     },
     async logout() {
       localStorage.removeItem(AuthConfig.TOKEN);
@@ -85,7 +93,7 @@ export const useAuthStore = defineStore({
       // TODO redirect user to login page
     },
     async getUser() {
-      this.user = await axios.get('user');
+      this.user = await axios.get(GET_USER);
     },
   },
 });

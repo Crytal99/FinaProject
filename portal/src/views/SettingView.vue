@@ -1,8 +1,8 @@
 <template lang="pug">
 .product-view
   h2 Settings
-  
-<div v-if="session = 'status'"> ok  
+
+<div v-if="session = 'status'"> ok
 </div>
 <div class="form-group">
 p search_enabled:
@@ -17,7 +17,7 @@ p search_enabled:
 <input type="file" @change="handleImageSelected"/>
 <p>placholder: </p>
 <input v-model="placholder" placeholder= 'placholder'/>
-p popular_search_enabled: 
+p popular_search_enabled:
 <select v-model="popular_search_enabled">
   <option disabled value="">Please select one</option>
   <option>true</option>

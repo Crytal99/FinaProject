@@ -7,7 +7,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
-import type { ILoginOAuthData } from '@/models/auth';
+import type { ILoginOAuthData } from '@/models/Auth';
 
 const isProcessing = ref(false);
 const route = useRoute();
@@ -15,10 +15,9 @@ const router = useRouter();
 
 const auth = async (): Promise<void> => {
   const { token, expires_in: expiresIn } = route.query;
-  const expiredAt = Date.now() + (expiresIn - 60) * 1000;
   const payload: ILoginOAuthData = {
     token,
-    expiredAt,
+    expiresIn,
   };
 
   await useAuthStore().login(payload);

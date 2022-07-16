@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { useAuthStore } from '../stores/auth';
 import AppConfig from '../configs/app';
 
 // interface IRequestConfig {
@@ -11,13 +10,14 @@ import AppConfig from '../configs/app';
 
 const instance = axios.create({
   baseURL: AppConfig.API_URL,
-  timeout: 5000,
+  // baseURL: 'https://reqres.in/api',
+  timeout: 50000,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// instance.interceptors.request.use(config => {
+// instance.interceptors.request.use((config) => {
 //   if (config.errorHandling) {
 //     store.dispatch('serverError/clearErrors');
 //   }
@@ -37,7 +37,7 @@ instance.interceptors.response.use(
       // 401 mean not authorized or token expired, should login again
       if (status === 401) {
         const { message } = error.response.data;
-        useAuthStore().logout();
+        // TODO show token expired dialog
         // TODO notify error
       } else if (status >= 400 && status <= 599) {
         if (error.config.errorHandling !== false) {
@@ -73,14 +73,14 @@ instance.interceptors.response.use(
       }
 
       return Promise.reject(error.response.data);
-    } if (error.request) {
+    } else if (error.request) { // eslint-disable-line
       // The request was made but no response was received
       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
       // http.ClientRequest in node.js
-      console.log(error.request); //eslint-disable-line
+      console.error(error.request); //eslint-disable-line
     } else {
       // Something happened in setting up the request that triggered an Error
-      console.log('Error', error.message); //eslint-disable-line
+      console.error('Error', error.message); //eslint-disable-line
     }
 
     return Promise.reject(error);

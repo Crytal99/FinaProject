@@ -1,5 +1,5 @@
 <template lang="pug">
-AppProvider
+.hoaivu
   template(v-if="isReady")
     BaseLayout(v-if="isAuthenticatedRouter")
       RouterView
@@ -15,14 +15,14 @@ AppProvider
           @click="reload"
         ) Reload browser
         | &nbsp;
-        a.btn.btn-secondary(href="https://support.subscription.com") Contact support
+        a.btn.btn-secondary(href="https://support.mobileapp.com") Contact support
     div(v-else)
       Spinner(message="Initializing...")
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue';
-import { useRoute, useRouter, RouterLink, RouterView } from 'vue-router';
+import { inject, ref, watch, onMounted } from 'vue';
+import { useRoute, RouterView } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import AuthConfig from '@/configs/auth';
 import BaseLayout from '@/components/layouts/BaseLayout.vue';
@@ -38,14 +38,6 @@ const reload = () => {
   // Clear token and reload the page
   localStorage.removeItem(AuthConfig.TOKEN);
   window.location.reload();
-};
-
-const checkReadyState = (): void => {
-  isReady.value = auth.isReady(route);
-};
-
-const updateRouterState = (): void => {
-  isAuthenticatedRouter.value = !(route.meta && route.meta.auth === false);
 };
 
 const doRefreshToken = (): void => {
@@ -67,9 +59,17 @@ const appInit = async (): Promise<void> => {
     await auth.getUser();
     doRefreshToken();
   } catch (error) {
-    console.log('Cannot start subscription portal', err); //eslint-disable-line
+    console.log('Cannot start Qikify customizer portal', error); //eslint-disable-line
     throw error;
   }
+};
+
+const checkReadyState = (): void => {
+  isReady.value = auth.isReady(route);
+};
+
+const updateRouterState = (): void => {
+  isAuthenticatedRouter.value = !(route.meta && route.meta.auth === false);
 };
 
 watch(() => route.fullPath, () => {

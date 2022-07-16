@@ -4,5 +4,5 @@ export default {
   LOADING: 'LOADING',
   ERROR: 'ERROR',
   INITIAL: 'INITIAL',
-  TOKEN: 'subscription_user_token',
+  TOKEN: 'hoaivu_user_token',
 };
