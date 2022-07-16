@@ -25,6 +25,7 @@ export function useImageUpload() {
 
     fileReader.addEventListener("load", () => {
       imageUrl.value = fileReader.result;
+      console.log('this is image value',imageUrl.value);
     });
   });
 
